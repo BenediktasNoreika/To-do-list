@@ -1,0 +1,15 @@
+alt+shift+r
+ctrl+space
+
+
+[10:43 AM] Davis, Alan
+    
+Ctrl + Shift + F (Format)
+Ctrl + Shift + O (Optimise Imports)
+Alt + Shift + R (Refactor highlighted)
+Alt + Shift + S (Quick Generate in Class)
+
+
+two entities: task list, tasks 
+
+Extent Reports - need methods implemented to show in presentation 
