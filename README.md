@@ -59,7 +59,7 @@ We use git and github for versioning.
 
 ## Authors
 
-* **Benediktas Noreika** - *Initial work* - [christophperrins](https://github.com/christophperrins)
+* **Benediktas Noreika** - *Initial work* - Vinesh Ghelish
 
 ## License
 
