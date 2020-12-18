@@ -1,3 +1,4 @@
+var listId = sessionStorage.getItem("ListId");
 document
 .querySelector("form.viewRecord")
 .addEventListener("submit", function (stop) {
@@ -7,13 +8,20 @@ document
     
     
     let name=formElements["name"].value;
-    
+    let dueDate =formElements["dueDate"].value;
     
 
   let data = {
     "name":name,
-}
+      "dueDate":dueDate,
+      "completed":"false",
+      "taskList":{
+        "id":listId
+    }
+      
+      
 
+}
 console.log("Data to post",data)
 sendData(data)
 
@@ -22,7 +30,7 @@ sendData(data)
 
 
 function sendData(data){
-fetch("http://localhost:9092/taskList/create", {
+fetch("http://localhost:9092/task/create", {
     method: 'post',
     headers: {
       "Content-type": "application/json; charset=UTF-8"

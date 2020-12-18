@@ -1,34 +1,14 @@
+const params = new URLSearchParams(window.location.search);
+for(let param of params ){
+  console.log("here i am",param)
+  let id = param[1];
+  console.log(id);
+  getData(id)
+  sessionStorage.setItem("ListId",id)
+}  
 
-function createElement(data){
-
-    for (const q of data) {
-  
-            const myDiv = document.querySelector('#myDiv');
-  
-            const pid = document.createElement('p');
-            const pname = document.createElement('p');
-            const pmake = document.createElement('p');
-            const pmodel = document.createElement('p');
-            const button = document.createElement('a')
-            const div = document.createElement('div');
-            const newLine = document.createElement('br');
-  
-  
-          myDiv.className = 'alert alert-danger';          //for styling
-          pid.innerHTML ="ID:"+q.id
-          pname.innerHTML ="Task name is:"+q.name
-          pmake.innerHTML =q.dueDate
-          pmodel.innerHTML =q.completed
-          button.innerHTML = "View"
-          button.className = "btn btn-danger"
-          button.href = "readOne.html?id="+q.id
-        div.append(pid, pname, pmake, pmodel, button, newLine);
-        myDiv.append(div);
-    }
-  }
-  
-  
-  fetch('http://localhost:9092/taskList/read/')
+  function getData(id){
+  fetch('http://localhost:9092/task/findByList/'+id)
     .then(
       function(response) {
         if (response.status !== 200) {
@@ -37,16 +17,15 @@ function createElement(data){
           return;
         }
   
-        
+        // Examine the text in the response
         response.json().then(function(commentData) {
   
           console.log(commentData[0])
-        
-         
+
            let table = document.querySelector("table");
-           let data = Object.keys(commentData[0]);
-      
-           createTableHead(table);
+           let data = Object.keys(commentData[0]); // first record in the array pos 0
+          
+           createTableHead(table,data);
           createTableBody(table,commentData);
           
         });
@@ -55,41 +34,50 @@ function createElement(data){
     .catch(function(err) {
       console.log('Fetch Error :-S', err);
     });
+  }
   
-    function createTableHead(table){
+    function createTableHead(table,data){
         let tableHead= table.createTHead();
         let row = tableHead.insertRow();
-       
+        for(let keys of data){
+            // console.log("data",data)
             let th = document.createElement("th");
-            let text = document.createTextNode("Task List name");
+            let text = document.createTextNode(keys);
             th.appendChild(text);
             row.appendChild(th)
-          
+          }
         }
-   
+        // let th2 = document.createElement("th")
+        // let text2 = document.createTextNode("View");
+        // th2.appendChild(text2);
+        // row.appendChild(th2);
+        // let th3 = document.createElement("th")
+        // let text3 = document.createTextNode("Delete");
+        // th3.appendChild(text3);
+        // row.appendChild(th3);
+  
     function createTableBody(table,commentData){
         for(let commentRecord of commentData){
             let row = table.insertRow();
-            
+            for(let values in commentRecord){
                 let cell = row.insertCell();
-                let text = document.createTextNode(commentRecord.name);
-                console.log(commentRecord);
+                let text = document.createTextNode(commentRecord[values]);
                 cell.appendChild(text);
-              
+              }
               let newCell = row.insertCell();
               let myViewButton = document.createElement("a");
-              let myButtonValue = document.createTextNode("View/add")
+              let myButtonValue = document.createTextNode("Edit")
               myViewButton.className ="btn btn-warning pull-right";
-              myViewButton.href="readAll.html?id="+commentRecord.id;
+              myViewButton.href="readOne.html?id="+commentRecord.id;
               myViewButton.appendChild(myButtonValue);
               newCell.appendChild(myViewButton)
               let newCellDelete = row.insertCell();
               let myDelButton = document.createElement("button");
-              let myButtonValue1 = document.createTextNode("Delete List")
+              let myButtonValue1 = document.createTextNode("Delete")
                myDelButton.className ="btn btn-danger pull-right";
                myDelButton.onclick = function(){
                
-                    fetch("http://localhost:9092/taskList/delete/"+commentRecord.id, {
+                    fetch("http://localhost:9092/task/delete/"+commentRecord.id, {
                         method: 'delete',
                         headers: {
                           "Content-type": "application/json; charset=UTF-8"
