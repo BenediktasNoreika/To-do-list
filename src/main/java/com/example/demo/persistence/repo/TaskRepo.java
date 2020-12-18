@@ -22,6 +22,6 @@ public interface TaskRepo extends JpaRepository<Task, Long> {
 	// find all by name
 	// JPQL
 	@Query(value = "select * from task where task_list_id=?1", nativeQuery = true)
-	List<Task> findByList(int id);
+	List<Task> findByList(Long id);
 
 }

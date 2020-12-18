@@ -82,7 +82,7 @@ public class TaskService {
 	}
 
 	// Find by name
-	public List<TaskDto> findByList(int id) {
+	public List<TaskDto> findByList(Long id) {
 		return this.repo.findByList(id).stream().map(this::mapToDTO).collect(Collectors.toList());
 		
 	}
