@@ -16,44 +16,43 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
 
-import com.example.demo.dto.TaskDto;
-import com.example.demo.persistence.domain.Task;
-import com.example.demo.persistence.repo.TaskRepo;
+import com.example.demo.dto.TaskListDto;
+import com.example.demo.persistence.domain.TaskList;
+import com.example.demo.persistence.repo.TaskListRepo;
 
 @SpringBootTest
 @ActiveProfiles("dev")
-class TaskServiceUnittest {
+class TaskListServiceUnittest {
 	
 	@Autowired
-	private TaskService service;
+	private TaskListService service;
 
 	@MockBean
-	private TaskRepo repo;
+	private TaskListRepo repo;
 
 	@Autowired
 	private ModelMapper mapper;
 	
 	
-	private final Task TEST_TASK_1 = new Task(1L,"dishes", "Tomorrow", false );
-	private final Task TEST_TASK_2 = new Task(1L,"hoover", "Today", false );
-	private final Task TEST_TASK_3 = new Task(1L,"laundry", "Friday", false );
-	private final Task TEST_TASK_4 = new Task(1L,"sweep", "monday", false );
+	private final TaskList TEST_TASK_1 = new TaskList(1L,"dishes");
+	private final TaskList TEST_TASK_2 = new TaskList(1L,"hoover");
+	private final TaskList TEST_TASK_3 = new TaskList(1L,"laundry");
+	private final TaskList TEST_TASK_4 = new TaskList(1L,"sweep");
+	private final List<TaskList> LIST_OF_TASKS = List.of(TEST_TASK_1, TEST_TASK_2, TEST_TASK_3, TEST_TASK_4);
 	
-	private final List<Task> LIST_OF_TASKS = List.of(TEST_TASK_1, TEST_TASK_2, TEST_TASK_3, TEST_TASK_4);
-	
-	private TaskDto mapToDTO(Task task) {
-		return this.mapper.map(task, TaskDto.class);		
+	private TaskListDto mapToDTO(TaskList taskList) {
+		return this.mapper.map(taskList, TaskListDto.class);		
 	}
 	
 	
 	@Test
 	void createTest() throws Exception {
-		Task newTask = new Task("dust","today",false);
-		Task newTaskFull = new Task(5L,"dust","today",false);
-		when(this.repo.save(newTask)).thenReturn(newTaskFull);
-		assertThat(this.service.create(newTask))
-				.isEqualTo(this.mapToDTO(newTaskFull));
-		verify(this.repo, atLeastOnce()).save(newTask);
+		TaskList newTaskList = new TaskList("dust");
+		TaskList newTaskListFull = new TaskList(5L,"dust");
+		when(this.repo.save(newTaskList)).thenReturn(newTaskListFull);
+		assertThat(this.service.create(newTaskList))
+				.isEqualTo(this.mapToDTO(newTaskListFull));
+		verify(this.repo, atLeastOnce()).save(newTaskList);
 	}
 	
 
@@ -61,10 +60,10 @@ class TaskServiceUnittest {
 	void readAllTest() throws Exception {
 		when(this.repo.findAll()).thenReturn(LIST_OF_TASKS);
 		
-		List<TaskDto> listOfTaskDTOs = LIST_OF_TASKS.stream().map(this::mapToDTO)
+		List<TaskListDto> listOfTaskListDTOs = LIST_OF_TASKS.stream().map(this::mapToDTO)
 				.collect(Collectors.toList());
 		
-		assertThat(this.service.readAll()).isEqualTo(listOfTaskDTOs);
+		assertThat(this.service.readAll()).isEqualTo(listOfTaskListDTOs);
 		verify(this.repo, atLeastOnce()).findAll();
 	}
 
